@@ -57,6 +57,24 @@ def show_image(index):
         root.winfo_width() // 2, root.winfo_height() // 2, image=tk_image)
 
 
+def next_image(event=None):
+    global current_index, scale_factor
+    current_index += 1
+    if current_index >= len(image_files):
+        current_index = 0
+    scale_factor = 1.0
+    show_image(current_index)
+
+
+def previous_image(event=None):
+    global current_index, scale_factor
+    current_index -= 1
+    if current_index < 0:
+        current_index = len(image_files) - 1
+    scale_factor = 1.0
+    show_image(current_index)
+
+
 root = tk.Tk()
 root.title("Image Viewer")
 
