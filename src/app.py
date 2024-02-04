@@ -134,6 +134,25 @@ def do_drag(event):
     drag_data["y"] = event.y
 
 
+def favorite_image(event):
+    global image_files, current_index, folder_path
+    # Get the current image file
+    image_file = image_files[current_index]
+    # Construct the source and destination paths
+    src_path = os.path.join(folder_path, image_file)
+    dst_path = os.path.join(folder_path, favorite_folder, image_file)
+    # Move the image file
+    shutil.move(src_path, dst_path)
+    # Update the image_files array
+    image_files = [f for f in os.listdir(
+        folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
+    # If the current index is not valid anymore, reset it to 0
+    if current_index >= len(image_files):
+        current_index = 0
+    # Show the next image
+    show_image(current_index)
+
+
 root = tk.Tk()
 root.title("Image Viewer")
 
