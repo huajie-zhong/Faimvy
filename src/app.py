@@ -75,6 +75,37 @@ def previous_image(event=None):
     show_image(current_index)
 
 
+def zoom(event):
+    global scale_factor, original_image, canvas_image, tk_image
+
+    # Increase or decrease the scale factor depending on the direction of the mouse scroll
+    if event.delta > 0:
+        # Don't allow zooming in beyond a certain scale factor
+        if scale_factor < 10.0:
+            scale_factor *= 1.1
+    else:
+        # Don't allow zooming out beyond a certain scale factor
+        if scale_factor > 0.1:
+            scale_factor /= 1.1
+
+    # Resize the original image
+    new_size = (int(original_image.width * scale_factor),
+                int(original_image.height * scale_factor))
+    image = original_image.resize(new_size, Image.LANCZOS)
+
+    # Get the current position of the image
+    coords = canvas.coords(canvas_image)
+    new_x = coords[0]
+    new_y = coords[1]
+
+    tk_image = ImageTk.PhotoImage(image)
+
+    # Update the canvas with the new image
+    canvas.delete("all")
+    canvas_image = canvas.create_image(
+        new_x, new_y, image=tk_image, anchor='center')
+
+
 root = tk.Tk()
 root.title("Image Viewer")
 
