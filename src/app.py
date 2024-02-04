@@ -22,6 +22,20 @@ canvas_image = None
 drag_data = {"x": 0, "y": 0, "item": None}
 
 
+def open_folder():
+    global image_files, folder_path
+    folder_path = filedialog.askdirectory()
+    if folder_path:
+        image_files = [f for f in os.listdir(
+            folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
+        if not image_files:
+            print("No image files found in the selected folder.")
+        else:
+            show_image(current_index)
+    else:
+        print("No folder selected.")
+
+
 root = tk.Tk()
 root.title("Image Viewer")
 
