@@ -37,6 +37,27 @@ def open_folder():
         print("No folder selected.")
 
 
+def open_image():
+    global image_files, current_index, folder_path
+    image_path = filedialog.askopenfilename(
+        filetypes=[('Image Files', '.jpg .jpeg .png')])
+    if image_path:
+        folder_path = os.path.dirname(image_path)
+        image_files = [f for f in os.listdir(
+            folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
+        if not image_files:
+            print("No image files found in the selected folder.")
+        else:
+            current_index = image_files.index(os.path.basename(image_path))
+            show_image(current_index)
+    else:
+        print("No image selected.")
+
+
+def on_drop(event):
+    open_image(event.data)
+
+
 def show_image(index):
     global scale_factor, original_image, canvas_image, tk_image
     image_path = os.path.join(folder_path, image_files[index])
