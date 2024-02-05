@@ -5,6 +5,7 @@ import send2trash
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import filedialog
+from tkinterdnd2 import TkinterDnD
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -37,10 +38,11 @@ def open_folder():
         print("No folder selected.")
 
 
-def open_image():
+def open_image(image_path=None):
     global image_files, current_index, folder_path
-    image_path = filedialog.askopenfilename(
-        filetypes=[('Image Files', '.jpg .jpeg .png')])
+    if image_path is None:
+        image_path = filedialog.askopenfilename(
+            filetypes=[('Image Files', '.jpg .jpeg .png')])
     if image_path:
         folder_path = os.path.dirname(image_path)
         image_files = [f for f in os.listdir(
@@ -55,7 +57,10 @@ def open_image():
 
 
 def on_drop(event):
-    open_image(event.data)
+    image_paths = event.data.strip('{}').split()
+    # Join the parts back together with spaces, in case the filename contained spaces
+    image_path = ' '.join(image_paths)
+    open_image(image_path)
 
 
 def show_image(index):
@@ -193,9 +198,8 @@ def delete_image(event):
     show_image(current_index)
 
 
-root = tk.Tk()
+root = TkinterDnD.Tk()
 root.title("Image Viewer")
-
 
 canvas = tk.Canvas(root, width=root.winfo_screenwidth(),
                    height=root.winfo_screenheight())
@@ -203,6 +207,8 @@ canvas.pack()
 
 open_button = tk.Button(root, text="Open Folder", command=open_folder)
 open_button.place(relx=0.0, rely=0.0, anchor='nw')
+open_image_button = tk.Button(root, text="Open Image", command=open_image)
+open_image_button.place(relx=0.1, rely=0.0, anchor='nw')
 
 root.geometry("854x480")
 
@@ -220,5 +226,8 @@ root.bind("<ButtonRelease-1>", stop_drag)
 
 root.bind('f', favorite_image)
 root.bind('d', delete_image)
+
+root.drop_target_register('DND_Files')
+root.dnd_bind('<<Drop>>', on_drop)
 
 root.mainloop()
