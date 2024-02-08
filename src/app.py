@@ -1,6 +1,6 @@
 import os
 import shutil
-import send2trash
+from send2trash import send2trash
 
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -194,6 +194,9 @@ def delete_image(event):
     image_files = [f for f in os.listdir(
         folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
     # If the current index is not valid anymore, reset it to 0
+    if not image_file:
+        canvas.delete("all")
+        messagebox.showinfo("No images files", "images has all been deleted")
     if current_index >= len(image_files):
         current_index = 0
     # Show the next image
