@@ -203,9 +203,19 @@ def delete_image(event):
 root = TkinterDnD.Tk()
 root.title("Image Viewer")
 
-canvas = tk.Canvas(root, width=root.winfo_screenwidth(),
-                   height=root.winfo_screenheight())
-canvas.pack()
+
+button_frame = tk.Frame(root)
+button_frame.pack(side=tk.TOP, fill=tk.X)
+
+open_button = tk.Button(button_frame, text="Open Folder", command=open_folder)
+open_button.pack(side=tk.LEFT)
+open_image_button = tk.Button(
+    button_frame, text="Open Image", command=open_image)
+open_image_button.pack(side=tk.LEFT)
+
+canvas_height = root.winfo_screenheight() - button_frame.winfo_reqheight()
+canvas = tk.Canvas(root, width=root.winfo_screenwidth(), height=canvas_height)
+canvas.pack(fill=tk.BOTH, expand=True)
 
 open_button = tk.Button(root, text="Open Folder", command=open_folder)
 open_button.place(relx=0.0, rely=0.0, anchor='nw')
