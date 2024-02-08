@@ -31,7 +31,8 @@ def open_folder():
         image_files = [f for f in os.listdir(
             folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
         if not image_files:
-            print("No image files found in the selected folder.")
+            messagebox.showinfo(
+                "No Image Files", "No image files found in the selected folder.")
         else:
             show_image(current_index)
     else:
@@ -48,7 +49,8 @@ def open_image(image_path=None):
         image_files = [f for f in os.listdir(
             folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
         if not image_files:
-            print("No image files found in the selected folder.")
+            messagebox.showinfo(
+                "No Image Files", "No image files found in the selected folder.")
         else:
             current_index = image_files.index(os.path.basename(image_path))
             show_image(current_index)
