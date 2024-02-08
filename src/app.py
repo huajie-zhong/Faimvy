@@ -69,7 +69,7 @@ def show_image(index):
     image_path = os.path.join(folder_path, image_files[index])
     image = Image.open(image_path)
     # Resize the image to fit the window
-    max_size = (root.winfo_width(), root.winfo_height())
+    max_size = (root.winfo_width(), root.winfo_height() - 50)
     image.thumbnail(max_size, Image.LANCZOS)
     # Store the original image
     original_image = image.copy()
