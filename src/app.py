@@ -188,7 +188,8 @@ def delete_image(event):
     # Construct the source and destination paths
     src_path = os.path.join(folder_path, image_file)
     # Move the image file
-    send2trash(src_path)
+    # send2trash()
+    os.remove(src_path)
     # Update the image_files array
     image_files = [f for f in os.listdir(
         folder_path) if f.endswith(('.jpg', '.jpeg', '.png'))]
