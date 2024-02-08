@@ -233,7 +233,7 @@ root.bind("<B1-Motion>", do_drag)
 root.bind("<ButtonRelease-1>", stop_drag)
 
 root.bind('f', favorite_image)
-root.bind('d', delete_image)
+root.bind('<Shift-D>', delete_image)
 
 root.drop_target_register('DND_Files')
 root.dnd_bind('<<Drop>>', on_drop)
