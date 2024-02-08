@@ -60,7 +60,6 @@ def open_image(image_path=None):
 
 def on_drop(event):
     image_paths = event.data.strip('{}').split()
-    # Join the parts back together with spaces, in case the filename contained spaces
     image_path = ' '.join(image_paths)
     open_image(image_path)
 
