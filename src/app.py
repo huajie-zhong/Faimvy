@@ -4,7 +4,7 @@ import send2trash
 
 import tkinter as tk
 from PIL import Image, ImageTk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinterdnd2 import TkinterDnD
 from dotenv import load_dotenv
 
