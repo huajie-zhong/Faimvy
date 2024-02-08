@@ -216,10 +216,6 @@ canvas_height = root.winfo_screenheight() - button_frame.winfo_reqheight()
 canvas = tk.Canvas(root, width=root.winfo_screenwidth(), height=canvas_height)
 canvas.pack(fill=tk.BOTH, expand=True)
 
-open_button = tk.Button(root, text="Open Folder", command=open_folder)
-open_button.place(relx=0.0, rely=0.0, anchor='nw')
-open_image_button = tk.Button(root, text="Open Image", command=open_image)
-open_image_button.place(relx=0.1, rely=0.0, anchor='nw')
 
 root.geometry("854x480")
 
