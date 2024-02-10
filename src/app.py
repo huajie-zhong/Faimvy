@@ -3,6 +3,7 @@ import shutil
 from send2trash import send2trash
 
 import PIL.ExifTags
+import pickle
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import filedialog, messagebox
@@ -11,8 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-favorite_folder = os.getenv("FAVORITE_FOLDER")
-
+FAVORITE_FOLDER_FILE = 'favorite_folder.pkl'
 
 image_files = []
 current_index = 0  # Index of the current image being displayed
@@ -23,6 +23,30 @@ original_image = None
 canvas_image = None
 
 drag_data = {"x": 0, "y": 0, "item": None}
+
+
+def load_favorite_folder():
+    if os.path.exists(FAVORITE_FOLDER_FILE):
+        with open(FAVORITE_FOLDER_FILE, 'rb') as f:
+            return pickle.load(f)
+    return None
+
+
+def save_favorite_folder(folder):
+    with open(FAVORITE_FOLDER_FILE, 'wb') as f:
+        pickle.dump(folder, f)
+
+
+def pick_favorite_folder():
+    global favorite_folder
+    favorite_folder = filedialog.askdirectory()
+    if not favorite_folder:
+        print("No folder selected.")
+    else:
+        save_favorite_folder(favorite_folder)
+
+
+favorite_folder = load_favorite_folder()
 
 
 def open_folder():
@@ -180,8 +204,11 @@ def do_drag(event):
 
 
 def favorite_image(event):
-    global image_files, current_index, folder_path
-    # Get the current image file
+    global image_files, current_index, folder_path, favorite_folder
+    if not favorite_folder:
+        messagebox.showinfo("No Favorite Folder",
+                            "Please pick a favorite folder first.")
+        return
     image_file = image_files[current_index]
     # Construct the source and destination paths
     src_path = os.path.join(folder_path, image_file)
@@ -234,6 +261,11 @@ open_button.pack(side=tk.LEFT)
 open_image_button = tk.Button(
     button_frame, text="Open Image", command=open_image)
 open_image_button.pack(side=tk.LEFT)
+
+pick_favorite_button = tk.Button(
+    button_frame, text="Pick Favorite Folder", command=pick_favorite_folder)
+pick_favorite_button.pack(side=tk.LEFT)
+
 
 canvas_height = root.winfo_screenheight() - button_frame.winfo_reqheight()
 canvas = tk.Canvas(root, width=root.winfo_screenwidth(), height=canvas_height)
