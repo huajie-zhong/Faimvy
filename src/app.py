@@ -68,18 +68,15 @@ def show_image(index):
     global scale_factor, original_image, canvas_image, tk_image
     image_path = os.path.join(folder_path, image_files[index])
     image = Image.open(image_path)
-    # Resize the image to fit the window
     max_size = (root.winfo_width(), root.winfo_height() - 50)
     image.thumbnail(max_size, Image.LANCZOS)
     # Store the original image
     original_image = image.copy()
-    # Apply the scale factor
     new_size = (int(image.width * scale_factor),
                 int(image.height * scale_factor))
     image = image.resize(new_size, Image.LANCZOS)
     tk_image = ImageTk.PhotoImage(image)
 
-    # Update the canvas with the new image
     canvas.delete("all")
     canvas_image = canvas.create_image(
         root.winfo_width() // 2, root.winfo_height() // 2, image=tk_image)
