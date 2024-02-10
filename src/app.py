@@ -2,6 +2,7 @@ import os
 import shutil
 from send2trash import send2trash
 
+import PIL.ExifTags
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import filedialog, messagebox
@@ -68,7 +69,19 @@ def show_image(index):
     global scale_factor, original_image, canvas_image, tk_image
     image_path = os.path.join(folder_path, image_files[index])
     image = Image.open(image_path)
-    max_size = (root.winfo_width(), root.winfo_height() - 50)
+
+    if image.format == 'JPEG':
+        exif_data = image._getexif()
+        if exif_data is not None:
+            # Convert the tag ID to the tag name
+            exif = {PIL.ExifTags.TAGS[k]: v for k, v in exif_data.items(
+            ) if k in PIL.ExifTags.TAGS and isinstance(PIL.ExifTags.TAGS[k], str)}
+        else:
+            exif = {"No EXIF data": ""}
+    elif image.format == 'PNG':
+        exif = image.info
+
+    max_size = (root.winfo_width() - 250, root.winfo_height() - 50)
     image.thumbnail(max_size, Image.LANCZOS)
     # Store the original image
     original_image = image.copy()
@@ -79,7 +92,14 @@ def show_image(index):
 
     canvas.delete("all")
     canvas_image = canvas.create_image(
-        root.winfo_width() // 2, root.winfo_height() // 2, image=tk_image)
+        ((root.winfo_width() // 2)-120), root.winfo_height() // 2, image=tk_image)
+
+    # Clear the Text widget and insert the EXIF data
+    exif_text.delete('1.0', tk.END)
+    for tag, value in exif.items():
+        exif_text.insert(tk.END, f"{tag}: {value}\n")
+
+    exif_text.config(state='disabled')
 
 
 def next_image(event=None):
@@ -203,6 +223,8 @@ def delete_image(event):
 root = TkinterDnD.Tk()
 root.title("Image Viewer")
 
+exif_text = tk.Text(root, height=10, width=30)
+exif_text.pack(side=tk.RIGHT, fill=tk.Y)
 
 button_frame = tk.Frame(root)
 button_frame.pack(side=tk.TOP, fill=tk.X)
@@ -218,7 +240,7 @@ canvas = tk.Canvas(root, width=root.winfo_screenwidth(), height=canvas_height)
 canvas.pack(fill=tk.BOTH, expand=True)
 
 
-root.geometry("854x480")
+root.geometry("1000x500")
 
 root.bind("<Right>", next_image)
 root.bind("r", next_image)
