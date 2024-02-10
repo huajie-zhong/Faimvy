@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+favorite_folder.pkl
+
 # Distribution / packaging
 .Python
 build/
