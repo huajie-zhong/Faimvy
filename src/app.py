@@ -1,6 +1,5 @@
 import os
 import shutil
-from send2trash import send2trash
 
 import PIL.ExifTags
 import pickle
@@ -8,9 +7,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter import filedialog, messagebox
 from tkinterdnd2 import TkinterDnD
-from dotenv import load_dotenv
 
-load_dotenv()
 
 FAVORITE_FOLDER_FILE = 'favorite_folder.pkl'
 
@@ -247,49 +244,57 @@ def delete_image(event):
     show_image(current_index)
 
 
-root = TkinterDnD.Tk()
-root.title("Image Viewer")
+def main():
+    global root, canvas, button_frame, exif_text, open_button, open_image_button, pick_favorite_button
 
-exif_text = tk.Text(root, height=10, width=30)
-exif_text.pack(side=tk.RIGHT, fill=tk.Y)
+    root = TkinterDnD.Tk()
+    root.title("Image Viewer")
+    root.iconbitmap('src/resources/faimvy.ico')
 
-button_frame = tk.Frame(root)
-button_frame.pack(side=tk.TOP, fill=tk.X)
+    exif_text = tk.Text(root, height=10, width=30)
+    exif_text.pack(side=tk.RIGHT, fill=tk.Y)
 
-open_button = tk.Button(button_frame, text="Open Folder", command=open_folder)
-open_button.pack(side=tk.LEFT)
-open_image_button = tk.Button(
-    button_frame, text="Open Image", command=open_image)
-open_image_button.pack(side=tk.LEFT)
+    button_frame = tk.Frame(root)
+    button_frame.pack(side=tk.TOP, fill=tk.X)
 
-pick_favorite_button = tk.Button(
-    button_frame, text="Pick Favorite Folder", command=pick_favorite_folder)
-pick_favorite_button.pack(side=tk.LEFT)
+    open_button = tk.Button(
+        button_frame, text="Open Folder", command=open_folder)
+    open_button.pack(side=tk.LEFT)
+    open_image_button = tk.Button(
+        button_frame, text="Open Image", command=open_image)
+    open_image_button.pack(side=tk.LEFT)
+
+    pick_favorite_button = tk.Button(
+        button_frame, text="Pick Favorite Folder", command=pick_favorite_folder)
+    pick_favorite_button.pack(side=tk.LEFT)
+
+    canvas_height = root.winfo_screenheight() - button_frame.winfo_reqheight()
+    canvas = tk.Canvas(root, width=root.winfo_screenwidth(),
+                       height=canvas_height)
+    canvas.pack(fill=tk.BOTH, expand=True)
+
+    root.geometry("1000x500")
+
+    root.bind("<Right>", next_image)
+    root.bind("r", next_image)
+
+    root.bind("<Left>", previous_image)
+    root.bind("e", previous_image)
+
+    root.bind("<MouseWheel>", zoom)
+
+    root.bind("<Button-1>", start_drag)
+    root.bind("<B1-Motion>", do_drag)
+    root.bind("<ButtonRelease-1>", stop_drag)
+
+    root.bind('f', favorite_image)
+    root.bind('<Shift-D>', delete_image)
+
+    root.drop_target_register('DND_Files')
+    root.dnd_bind('<<Drop>>', on_drop)
+
+    root.mainloop()
 
 
-canvas_height = root.winfo_screenheight() - button_frame.winfo_reqheight()
-canvas = tk.Canvas(root, width=root.winfo_screenwidth(), height=canvas_height)
-canvas.pack(fill=tk.BOTH, expand=True)
-
-
-root.geometry("1000x500")
-
-root.bind("<Right>", next_image)
-root.bind("r", next_image)
-
-root.bind("<Left>", previous_image)
-root.bind("e", previous_image)
-
-root.bind("<MouseWheel>", zoom)
-
-root.bind("<Button-1>", start_drag)
-root.bind("<B1-Motion>", do_drag)
-root.bind("<ButtonRelease-1>", stop_drag)
-
-root.bind('f', favorite_image)
-root.bind('<Shift-D>', delete_image)
-
-root.drop_target_register('DND_Files')
-root.dnd_bind('<<Drop>>', on_drop)
-
-root.mainloop()
+if __name__ == "__main__":
+    main()
