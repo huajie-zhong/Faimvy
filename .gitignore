@@ -7,7 +7,6 @@ __pycache__/
 *.so
 
 favorite_folder.pkl
-faimvy.ico
 
 # Distribution / packaging
 .Python
