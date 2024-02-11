@@ -24,7 +24,8 @@ The Image Viewer allows users to view images, open folders, and pick a favorite 
 6. **Dragging**: Click and drag an image to move it within the window.
 7. **Favorite Image**: Press **'f'** key to move the current image to the favorite folder.
 8. **Delete Image**: Press **Shift + D** to delete the current image.
-9. **Drag and Drop**: You can drag and drop image files directly onto the window to open them.
+9. **Reading Metadata/EXIF Data**: Metadata/EXIF data is displayed alongside the image.
+10. **Drag and Drop**: You can drag and drop image files directly onto the window to open them.
 
 ## Installation
 
